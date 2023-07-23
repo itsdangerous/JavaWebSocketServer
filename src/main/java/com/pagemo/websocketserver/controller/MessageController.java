@@ -2,18 +2,14 @@
 
 package com.pagemo.websocketserver.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
@@ -42,7 +38,6 @@ public class MessageController {
         this.template.convertAndSend("/topic/messages", message); // http post 요청의 본문을 웹소켓 클라이언트에게 보냄
         return message;
     }
-
 
 //    클라이언트가 /app/send로 메시지를 보낼 때마다
 //    그 메시지를 그대로 /topic/messages 주제를 구독하는 모든 클라이언트에게 보냄
