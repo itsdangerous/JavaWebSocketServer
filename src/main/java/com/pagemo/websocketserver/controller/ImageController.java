@@ -18,7 +18,6 @@ import java.util.Map;
 @RestController
 public class ImageController {
     private final SimpMessagingTemplate template;
-    private long start;
 
     public ImageController(SimpMessagingTemplate template) {
         this.template = template;
@@ -29,7 +28,6 @@ public class ImageController {
     @MessageMapping("/imageData")
     public void processImageDataFromReactClient(@Payload byte[] imageBytes) {
         long end = System.currentTimeMillis();
-        System.out.println("걸린 시간 : " + (end - start) + "ms");
         this.template.convertAndSend("/topic/imageData", imageBytes); // http post 요청의 본문을 웹소켓 클라이언트에게 보냄
         System.out.println("이미지데이터를 파이썬 클라이언트에게 성공적으로 보냈음.");
     }
