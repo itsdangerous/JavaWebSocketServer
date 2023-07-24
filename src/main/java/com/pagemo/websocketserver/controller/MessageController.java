@@ -22,23 +22,6 @@ public class MessageController {
         this.template = template;
     }
 
-//    테스트
-    @GetMapping("/test")
-    @ResponseBody
-    public String testMessage() {
-        return "test...OK";
-    }
-
-    /*/send라는 URL로 POST 요청이 들어오면,
-     해당 메시지가 웹소켓을 통해 /topic/messages 경로를 구독하고 있는 모든 클라이언트에게 전송*/
-    @PostMapping("/send")
-    @ResponseBody
-    public String sendMessage(@RequestBody String message) {
-        System.out.println("http로 post 요청을 받음. message : " + message);
-        this.template.convertAndSend("/topic/messages", message); // http post 요청의 본문을 웹소켓 클라이언트에게 보냄
-        return message;
-    }
-
 //    클라이언트가 /app/send로 메시지를 보낼 때마다
 //    그 메시지를 그대로 /topic/messages 주제를 구독하는 모든 클라이언트에게 보냄
     @MessageMapping("/receive")
