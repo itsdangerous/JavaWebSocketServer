@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Base64;
 import java.util.Map;
 
 
@@ -26,13 +27,11 @@ public class ImageController {
     // 리액트 클라이언트가 /app/imageData 경로로 이미지 데이터를 전송하면
     // 자바 서버는 /topic/imageData를 구독하고 있는 파이썬 클라이언트에게 이미지 데이터를 전송.
     @MessageMapping("/imageData")
-    public void processImageDataFromReactClient(@Payload byte[] imageBytes) {
-        if (imageBytes.length > 0) {
-                System.out.println("이미지 데이터를 리액트 클라이언트로부터 받음. ");
-            // /topic/imageData를 구독하는 파이썬 클라이언트에게 이미지 데이터 전송
-            this.template.convertAndSend("/topic/imageData", imageBytes);
-            System.out.println("이미지데이터를 파이썬 클라이언트에게 성공적으로 보냈음.");
-        };
+    public void processImageDataFromReactClient(@Payload String imageBytes) {
+        System.out.println("1. 이미지 데이터를 리액트 클라이언트로부터 받음. ");
+        // /topic/imageData를 구독하는 파이썬 클라이언트에게 이미지 데이터 전송
+        this.template.convertAndSend("/topic/imageData", imageBytes.getBytes());
+        System.out.println("2. 이미지데이터를 파이썬 클라이언트에게 성공적으로 보냈음.");
     }
 
     // /app/analyze 경로로 파이썬 클라이언트가 결과를 던져주면,
@@ -41,6 +40,8 @@ public class ImageController {
     public void receiveAnalyzingDataFromPythonClient(@Payload Map<String, Object> analyzingData) {
 
         // /topic/analyzingData를 구독하는 리액트 클라이언트에게 이미지 데이터 전송
+        System.out.println("3. 이미지 결과를 파이썬 클라이언트로부터 받음.");
+        System.out.println("4. 이미지 결과를 리액트 클라이언트로 보냈음.");
         this.template.convertAndSend("/topic/analyzingData", analyzingData);
 
     }
